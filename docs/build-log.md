@@ -80,5 +80,41 @@ build-in-public post — a Stage 3 bonus contribution.)
   MSFT-format filings (TOC heuristic); Gemma cloud triage (M3) and/or a
   smarter section locator will close it.
 
-**Open items**: repo has no first commit yet (provenance!); org policy admin role
-can be revoked from the gmail account now that the override is applied.
+**Open items (as of Aug 13 close)**: first commit made (772181c); org policy admin
+role can be revoked from the gmail account now that the override is applied.
+
+## Aug 14–17 — the agent ran itself
+
+Cloud Scheduler fired the job at 6:30 AM PT on **Aug 14, 15, 16, and 17 — four
+for four, all succeeded, zero human involvement**. Each run: scanned the
+watchlist, correctly found no new filings in the 3-day window (none were filed),
+wrote a clean digest, reported "no alerts", exit(0). This is the demo line:
+*"it has been running every morning since the day I deployed it."*
+
+## Aug 17 — M3 in progress + parser fix
+
+- **Parser gap closed.** Root cause of the missing MSFT risk factors: inline-XBRL
+  HTML splits words across spans (`RIS K FACTORS`) and MSFT repeats "Item 1A" as
+  a running page header through the whole section, defeating "take the last
+  match". Fix: match headings with optional intra-word whitespace, and choose
+  the match with the *longest following body*. MSFT risk factors 0 → 80k chars;
+  Apple unchanged; 6 new parser tests incl. a regression over cached real
+  filings. 14/14 passing.
+- Job image v2 (parser fix + identity-token auth to a private Gemma service)
+  built and rolled out.
+
+**M3 — Gemma cloud proof: DONE (Aug 17, a day early)**
+- `edgar-sentinel-gemma`: Ollama with gemma3:4b baked into the image (no
+  cold-start download), private Cloud Run service, 4 CPU / 8 GiB, concurrency 1,
+  scale-to-zero, 60×10s startup probe for model load. Job SA granted
+  run.invoker; the triage stage sends an identity token (no-op on localhost).
+- Cold-start smoke test: 90s to first token (model load), then a sensible
+  analyst-grade answer. Warm calls are far faster.
+- **DoD met:** cloud execution `edgar-sentinel-daily-7dhxz` on MSFT's 10-K logged
+  `sections=[..., 'risk_factors'], gemma_notes=['risk_factors']` — parser fix and
+  cloud Gemma both verified in one unattended run. FHS 90 Strong; highlights
+  now include the OpenAI recapitalization gain ($6.5B) and capex +79.6% to
+  $115.9B. Bonus point (Gemma) is now provable from Cloud Logging + Cloud Run
+  console, not just from code.
+- Cost posture: Gemma scoped to `risk_factors` only in the cloud job so CPU
+  inference stays within a few minutes/filing; scale story = GPU Cloud Run.

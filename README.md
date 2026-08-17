@@ -31,7 +31,7 @@ Cloud Run job ──► EDGAR client ──► Cloud Storage (raw filings)
 | Gemini 3.5+ via Gemini API / Vertex AI | `src/edgar_sentinel/pipeline/analyst.py` |
 | Google Agent Framework (ADK) | `src/edgar_sentinel/agent.py` — orchestrator agent + pipeline tools |
 | Google Cloud service | Cloud Run Job `edgar-sentinel-daily` + Cloud Scheduler (6:30 AM PT) + Firestore (analyses, state) + Cloud Storage (filing archive) + Artifact Registry/Cloud Build |
-| Bonus: additional Google model | Gemma parsing stage, `pipeline/parser.py` |
+| Bonus: additional Google model | Gemma triage stage, `pipeline/parser.py` — gemma3:4b served by Ollama on Cloud Run (`edgar-sentinel-gemma`, private, scale-to-zero, `deploy/gemma/`); gemma4:12b via local Ollama for dev |
 | New project, built Aug 3–31 2026 | Fresh repo, full history in-window |
 
 ## Quickstart (local)
@@ -58,5 +58,8 @@ python -m edgar_sentinel.main run --tickers AAPL MSFT --since 45 --limit 2 --ski
 5. ✅ Cloud deployment — Cloud Run Job (least-privilege service account) triggered
    daily by Cloud Scheduler; filings archived to Cloud Storage; seen-state and
    analyses in Firestore; verified with a full in-cloud MSFT 10-K run
-6. ⬜ Digest delivery (email) + minimal read-only web view
-7. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
+6. ✅ Gemma in the cloud — Ollama + gemma3:4b as a private Cloud Run service; the
+   daily job authenticates with its service identity; verified in-cloud
+   (`gemma_notes=['risk_factors']` in Cloud Logging)
+7. ⬜ Digest delivery (email) + minimal read-only web view
+8. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
