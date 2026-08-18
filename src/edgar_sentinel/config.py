@@ -58,6 +58,11 @@ class Settings:
     storage_backend: str = os.getenv("STORAGE_BACKEND", "local")  # local | firestore
     alert_threshold: int = int(os.getenv("ALERT_THRESHOLD", "10"))
     gcs_bucket: str = os.getenv("GCS_BUCKET", "")  # empty = no cloud archive
+    # Digest email (SendGrid). Empty key = delivery disabled.
+    sendgrid_api_key: str = os.getenv("SENDGRID_API_KEY", "")
+    digest_to: str = os.getenv("DIGEST_TO", "")
+    digest_from: str = os.getenv("DIGEST_FROM", "")
+    digest_always: bool = os.getenv("DIGEST_ALWAYS", "false").lower() == "true"
 
 
 settings = Settings()

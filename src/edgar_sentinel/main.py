@@ -94,6 +94,10 @@ def run(args) -> None:
     digest = out / f"digest-{datetime.now():%Y%m%d-%H%M%S}.json"
     digest.write_text(json.dumps(results, indent=2))
     print(f"[run] digest written: {digest}")
+    if not args.skip_llm and (results or settings.digest_always):
+        from .digest import send_digest
+
+        send_digest(results)
 
 
 def main() -> None:

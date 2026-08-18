@@ -136,19 +136,31 @@ def analyze_filing(accession: str) -> dict:
 
 
 def write_digest() -> dict:
-    """Write the run digest JSON (all analyses and deltas). Call exactly once,
-    after every filing has been analyzed.
+    """Write the run digest JSON (all analyses and deltas) and email it to the
+    subscriber. Call exactly once, after every filing has been analyzed.
 
     Returns:
-        Digest file path plus counts of analyses and alerts.
+        Digest file path, counts of analyses and alerts, and whether the
+        email was sent.
     """
+    from .digest import send_digest
+
     out = Path(settings.data_dir) / "output"
     out.mkdir(parents=True, exist_ok=True)
     digest = out / f"digest-{datetime.now():%Y%m%d-%H%M%S}.json"
     digest.write_text(json.dumps(_ctx["results"], indent=2))
-    alerts = sum(1 for e in _ctx["results"] if e.get("delta", {}).get("alert"))
-    print(f"[tool] write_digest -> {digest} ({len(_ctx['results'])} analyses, {alerts} alerts)")
-    return {"digest_path": str(digest), "analyzed": len(_ctx["results"]), "alerts": alerts}
+    results = _ctx["results"]
+    alerts = sum(1 for e in results if e.get("delta", {}).get("alert"))
+    print(f"[tool] write_digest -> {digest} ({len(results)} analyses, {alerts} alerts)")
+    # Email when there is something to say; DIGEST_ALWAYS also sends the
+    # "nothing new today" heartbeat.
+    emailed = send_digest(results) if (results or settings.digest_always) else False
+    return {
+        "digest_path": str(digest),
+        "analyzed": len(results),
+        "alerts": alerts,
+        "emailed": emailed,
+    }
 
 
 INSTRUCTION = """You are EDGAR Sentinel's orchestrator, an autonomous SEC-filings
