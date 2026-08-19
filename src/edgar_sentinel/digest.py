@@ -116,7 +116,7 @@ def send_digest(results: list[dict], run_date: str | None = None) -> bool:
         r = requests.post(
             "https://api.sendgrid.com/v3/mail/send",
             headers={"Authorization": f"Bearer {settings.sendgrid_api_key}"},
-            data=json.dumps(payload),
+            json=payload,
             timeout=30,
         )
         if r.status_code // 100 == 2:

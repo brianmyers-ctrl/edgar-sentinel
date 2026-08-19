@@ -118,3 +118,22 @@ wrote a clean digest, reported "no alerts", exit(0). This is the demo line:
   console, not just from code.
 - Cost posture: Gemma scoped to `risk_factors` only in the cloud job so CPU
   inference stays within a few minutes/filing; scale story = GPU Cloud Run.
+
+## Aug 18–19 — M4: the morning email (DONE)
+
+- SendGrid sender identity verified, Mail-Send-only API key stored in **Secret
+  Manager** (`sendgrid-api-key`; empty v1 from a terminal mishap disabled, v2
+  live) and mounted on the Cloud Run Job as `SENDGRID_API_KEY` — the job SA has
+  `secretmanager.secretAccessor`; no key ever touched the repo or the image.
+- `digest.py`: plain-text + HTML renderers (alerts banner first, FHS cards
+  color-banded Strong→Distress, three highlights, what-changed narrative),
+  best-effort sender that logs and never raises. `write_digest` tool emails
+  when there is something to report (`DIGEST_ALWAYS` for a quiet-day heartbeat).
+- Bug caught in the cloud, not the demo: first send came back **415** — body was
+  passed as a pre-serialized string without a JSON content-type. Fixed with
+  `json=payload`. Failure was contained exactly as designed: logged, run still
+  exit(0).
+- **DoD met (job image v4):** cloud execution analyzed AAPL's two quarters with
+  cloud Gemma triage and logged
+  `[digest] emailed to brianrmyers0912@gmail.com: EDGAR Sentinel 2026-08-19: 2 new filings analyzed`.
+- Milestones M1–M4 complete as of Aug 19; plan had M4 finishing Aug 20.

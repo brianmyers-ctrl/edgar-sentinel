@@ -61,5 +61,7 @@ python -m edgar_sentinel.main run --tickers AAPL MSFT --since 45 --limit 2 --ski
 6. ✅ Gemma in the cloud — Ollama + gemma3:4b as a private Cloud Run service; the
    daily job authenticates with its service identity; verified in-cloud
    (`gemma_notes=['risk_factors']` in Cloud Logging)
-7. ⬜ Digest delivery (email) + minimal read-only web view
-8. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
+7. ✅ Digest delivery — SendGrid email from the daily job (alerts banner, color-banded
+   FHS cards, what-changed narrative); API key in Secret Manager, mounted on the job
+8. ⬜ Dashboard: minimal read-only web view over Firestore
+9. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
