@@ -155,3 +155,19 @@ wrote a clean digest, reported "no alerts", exit(0). This is the demo line:
   strugglers: INTC, BA, PTON, BYND, LCID, PLUG, SMCI, AMC...). Cloud backfill
   running as four chained executions (Gemma off for backfill speed; daily runs
   keep Gemma on).
+
+## Aug 20 — M6 complete; repo public on GitHub
+
+- Backfill finished across four cloud executions: **30 companies, 56 filings,
+  8 live alerts** on the dashboard — including PLUG (Caution → Distress), UBER
+  and PYPL (out of Strong), and genuine recoveries (COIN +8, AMC +10 out of
+  Distress). All from the deterministic rule on real quarter-over-quarter
+  filings; nothing staged.
+- Notable single-quarter reads from the wide scan: PLTR 93, ABNB 90, AMD 89
+  (OpenAI/Meta GPU warrants), AMZN 82 with FCF negative on $169B TTM capex;
+  BYND 27 / LCID 34 / PLUG 36 in Distress.
+- Repo pushed to **github.com/brianmyers-ctrl/edgar-sentinel** (public, company
+  GitHub account, brianmyers@asisystems.io) — full in-window commit history.
+  Entry path: on behalf of ASI (Startup Excellence eligible).
+- Remaining for M7: README final pass, ≤4-min demo video (script next),
+  build-in-public post, #AllThingsAgenticHackathon social post, Devpost form.
