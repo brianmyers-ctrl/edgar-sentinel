@@ -137,3 +137,21 @@ wrote a clean digest, reported "no alerts", exit(0). This is the demo line:
   cloud Gemma triage and logged
   `[digest] emailed to brianrmyers0912@gmail.com: EDGAR Sentinel 2026-08-19: 2 new filings analyzed`.
 - Milestones M1–M4 complete as of Aug 19; plan had M4 finishing Aug 20.
+
+## Aug 19 — M5: the dashboard (DONE) + M6 started
+
+- `dashboard/`: FastAPI, server-rendered dark-theme HTML, zero client JS —
+  overview (health bands, alert feed, watchlist sorted weakest-first with SVG
+  sparklines), company trend pages, filing drill-downs (pillar bars with
+  rationales, key metrics, delta narrative, Gemma triage notes, link to the
+  source filing on SEC.gov). Deltas recomputed on read so pre-delta-engine
+  analyses still show movement.
+- Deployed as `edgar-sentinel-dashboard` on Cloud Run: public URL, read-only,
+  its own service account holding only `datastore.viewer` — the dashboard
+  cannot write anything, which is the right posture for a public surface.
+  https://edgar-sentinel-dashboard-69101807007.us-central1.run.app
+- 2 dashboard tests over a seeded local store (20/20 passing overall).
+- **M6 underway:** watchlist widened to 30 tickers (big tech + deliberate
+  strugglers: INTC, BA, PTON, BYND, LCID, PLUG, SMCI, AMC...). Cloud backfill
+  running as four chained executions (Gemma off for backfill speed; daily runs
+  keep Gemma on).

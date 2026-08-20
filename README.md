@@ -63,5 +63,8 @@ python -m edgar_sentinel.main run --tickers AAPL MSFT --since 45 --limit 2 --ski
    (`gemma_notes=['risk_factors']` in Cloud Logging)
 7. ✅ Digest delivery — SendGrid email from the daily job (alerts banner, color-banded
    FHS cards, what-changed narrative); API key in Secret Manager, mounted on the job
-8. ⬜ Dashboard: minimal read-only web view over Firestore
+8. ✅ Dashboard — public read-only Cloud Run service over Firestore:
+   https://edgar-sentinel-dashboard-69101307007.us-central1.run.app
+   (overview with health bands + alerts + FHS sparklines, company trend pages,
+   filing drill-downs with pillar bars, delta narratives, and Gemma notes)
 9. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
