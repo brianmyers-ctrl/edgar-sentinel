@@ -8,6 +8,8 @@ Every day, without supervision, it: scans SEC EDGAR for new 10-K/10-Q filings fr
 
 ## Architecture
 
+Full diagram with service identities and data flows: [docs/architecture.md](docs/architecture.md)
+
 ```
 Cloud Scheduler (daily)
         │

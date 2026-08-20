@@ -149,7 +149,7 @@ wrote a clean digest, reported "no alerts", exit(0). This is the demo line:
 - Deployed as `edgar-sentinel-dashboard` on Cloud Run: public URL, read-only,
   its own service account holding only `datastore.viewer` — the dashboard
   cannot write anything, which is the right posture for a public surface.
-  https://edgar-sentinel-dashboard-69101807007.us-central1.run.app
+  https://edgar-sentinel-dashboard-69101307007.us-central1.run.app
 - 2 dashboard tests over a seeded local store (20/20 passing overall).
 - **M6 underway:** watchlist widened to 30 tickers (big tech + deliberate
   strugglers: INTC, BA, PTON, BYND, LCID, PLUG, SMCI, AMC...). Cloud backfill
