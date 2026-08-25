@@ -29,8 +29,15 @@ _PATTERNS = {
     "mdna": rf"item\s*[27]{_GAP}{_spaced('management')}['’]?s?\s+{_phrase('discussion', 'and', 'analysis')}",
     "financials": rf"item\s*[18]{_GAP}{_phrase('financial', 'statements')}",
 }
-# Fallback: some filers omit the "Item 1A" prefix in the body heading entirely.
-_BODY_FALLBACK = {"risk_factors": rf"\b{_phrase('risk', 'factors')}\b"}
+# Fallbacks: some filers (e.g. Intel) omit item prefixes in body headings
+# entirely — the item numbers live only in an end-of-document index. Matched
+# CASE-SENSITIVELY against the original text so Title Case / ALL CAPS headings
+# match but mid-prose references ("these risk factors") do not.
+_BODY_FALLBACK = {
+    "risk_factors": r"(?:RISK\s+FACTORS|Risk\s+Factors)",
+    "mdna": r"(?:MANAGEMENT|Management)['’]?[Ss]?\s+(?:DISCUSSION|Discussion)\s+(?:AND|and)\s+(?:ANALYSIS|Analysis)",
+    "financials": r"(?:(?:CONSOLIDATED|Consolidated)\s+)?(?:(?:CONDENSED|Condensed)\s+)?(?:FINANCIAL|Financial)\s+(?:STATEMENTS|Statements)",
+}
 _SECTION_CAP = 80_000
 _MIN_SECTION = 500
 
@@ -47,36 +54,44 @@ def extract_sections(html: str) -> dict[str, str]:
     norm = re.sub(r"\s+", " ", soup.get_text(" "))
     low = norm.lower()
 
-    matches_by_key = {
-        key: [m.start() for m in re.finditer(pat, low)] for key, pat in _PATTERNS.items()
-    }
-    all_positions: list[int] = sorted(p for ps in matches_by_key.values() for p in ps)
+    primary = {k: [m.start() for m in re.finditer(p, low)] for k, p in _PATTERNS.items()}
+    # Case-sensitive heading matches over the original text (see _BODY_FALLBACK).
+    fallback = {k: [m.start() for m in re.finditer(p, norm)] for k, p in _BODY_FALLBACK.items()}
 
-    def _span(pos: int) -> int:
-        nxt = [p for p in all_positions if p > pos]
-        return (nxt[0] if nxt else len(norm)) - pos
+    # SCORING: a candidate heading is judged by how much text follows it before
+    # a DIFFERENT section's heading appears. TOC lines sit next to other
+    # sections' entries (tiny score); running page headers repeat the section's
+    # OWN name, which same-key exclusion ignores — so real section starts win.
+    positions_by_key = {
+        k: sorted(set(primary[k]) | set(fallback.get(k, []))) for k in _PATTERNS
+    }
 
     starts: dict[str, int] = {}
-    for key, positions in matches_by_key.items():
-        if positions:
-            starts[key] = max(positions, key=_span)
-    # Fallback for headings without an item prefix: pick the "risk factors"
-    # occurrence that begins the longest run of text (the real section, not a
-    # cross-reference or TOC line).
-    for key, pat in _BODY_FALLBACK.items():
-        if key in starts:
-            continue
-        cands = [m.start() for m in re.finditer(pat, low)]
-        if cands:
-            best = max(cands, key=_span)
-            if _span(best) >= _MIN_SECTION:
-                starts[key] = best
-                all_positions.append(best)
-    all_positions.sort()
+    for key in _PATTERNS:
+        other = sorted(
+            p for k2, ps in positions_by_key.items() if k2 != key for p in ps
+        )
 
+        def _score(pos: int) -> int:
+            nxt = [b for b in other if b > pos]
+            return (nxt[0] if nxt else len(norm)) - pos
+
+        # Pool both tiers: some filers' item-prefixed matches exist ONLY in an
+        # end-of-document cross-reference index (Intel), so a primary match
+        # must still out-score the bare-heading candidates to win.
+        cands = sorted(set(primary[key]) | set(fallback.get(key, [])))
+        if cands:
+            best = max(cands, key=_score)
+            if _score(best) >= _MIN_SECTION:
+                starts[key] = best
+
+    # SLICING uses only the chosen section starts: stray in-body references
+    # (page footers like "Notes to ... Financial Statements") must not
+    # truncate a section they merely appear inside.
+    chosen = sorted(starts.values())
     sections: dict[str, str] = {}
     for key, start in starts.items():
-        nexts = [p for p in all_positions if p > start]
+        nexts = [p for p in chosen if p > start]
         end = min(nexts[0] if nexts else len(norm), start + _SECTION_CAP)
         body = norm[start:end].strip()
         if len(body) >= _MIN_SECTION:
