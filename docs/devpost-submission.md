@@ -52,9 +52,10 @@ EDGAR Sentinel is an autonomous background agent on Google Cloud. Every day at
    and per-filing drill-downs showing every pillar's reasoning, the
    quarter-over-quarter delta, and Gemma's notes.
 
-Live right now: 30 companies, 56+ filings, 8+ real alerts — including Plug
-Power sliding Caution → Distress, Meta and Ford dropping a band, and Coinbase
-and AMC genuinely recovering. Running unattended every morning since August 14.
+Live right now: 30 companies, 58+ filings, 8+ real alerts — including Plug
+Power sliding Caution → Distress, Salesforce and Meta dropping a band, and
+Coinbase and AMC genuinely recovering. Running unattended every morning since
+August 14.
 
 ## How we built it
 

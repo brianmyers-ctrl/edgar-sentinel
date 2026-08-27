@@ -69,4 +69,7 @@ python -m edgar_sentinel.main run --tickers AAPL MSFT --since 45 --limit 2 --ski
    https://edgar-sentinel-dashboard-69101307007.us-central1.run.app
    (overview with health bands + alerts + FHS sparklines, company trend pages,
    filing drill-downs with pillar bars, delta narratives, and Gemma notes)
-9. ⬜ Architecture diagram, demo video (≤4 min), build-in-public post
+9. ✅ Architecture diagram ([docs/architecture.md](docs/architecture.md)) and demo
+   video (3:45, live on-camera Cloud Run execution; link in the Devpost
+   submission)
+10. ⬜ Build-in-public blog post + social post
