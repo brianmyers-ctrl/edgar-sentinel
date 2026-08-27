@@ -9,7 +9,7 @@
 **Demo video:** <YouTube URL — public, ≤ 4:00>
 **Bonus — build-in-public post:** <blog URL>
 **Bonus — social post:** <X/LinkedIn URL with #AllThingsAgenticHackathon>
-**Bonus — additional Google model:** Gemma (gemma3:4b on Cloud Run; gemma4:12b locally) — triage stage
+**Bonus — additional Google models:** Gemma (gemma3:4b on Cloud Run; gemma4:12b locally) — triage stage; **Lyria 2** (lyria-002 on Vertex AI) — generated the demo video's lo-fi soundtrack
 
 ---
 
@@ -65,7 +65,9 @@ August 14.
   the run report; tested Python does the deterministic work. *Agentic control
   flow, deterministic execution.*
 - **Models:** Gemini 3.5 Flash via **Vertex AI** (analysis, delta narrative,
-  orchestrator); **Gemma** via Ollama on **Cloud Run** (triage notes).
+  orchestrator); **Gemma** via Ollama on **Cloud Run** (triage notes);
+  **Lyria 2** via Vertex AI (demo-video soundtrack) and **Google Cloud
+  Text-to-Speech** (Chirp3-HD narration) in the submission video.
 - **Infrastructure:** Cloud Run Job + **Cloud Scheduler** (daily trigger),
   **Firestore** (analyses, state, agent memory), **Cloud Storage** (raw filing
   archive), **Secret Manager** (the single secret), **Artifact Registry / Cloud
@@ -121,10 +123,11 @@ as the fallback when heuristics fail on unusual filer formats.
 
 ## Technologies
 
-Python 3.12, Google ADK, google-genai, Vertex AI (Gemini 3.5 Flash), Gemma
-(gemma3:4b / gemma4:12b) via Ollama, Cloud Run (jobs + services), Cloud
-Scheduler, Firestore, Cloud Storage, Secret Manager, Cloud Build, Artifact
-Registry, FastAPI, BeautifulSoup/lxml, pydantic, SendGrid, pytest.
+Python 3.12, Google ADK, google-genai, Vertex AI (Gemini 3.5 Flash, Lyria 2),
+Gemma (gemma3:4b / gemma4:12b) via Ollama, Google Cloud Text-to-Speech, Cloud
+Run (jobs + services), Cloud Scheduler, Firestore, Cloud Storage, Secret
+Manager, Cloud Build, Artifact Registry, FastAPI, BeautifulSoup/lxml,
+pydantic, SendGrid, pytest.
 
 ## Data sources
 
