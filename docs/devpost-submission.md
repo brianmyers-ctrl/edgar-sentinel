@@ -6,7 +6,7 @@
 **Startup Excellence:** submitting on behalf of Artificial Systems Integration (asisystems.io) — corporate email: brianmyers@asisystems.io
 **Hosted project URL:** https://edgar-sentinel-dashboard-69101307007.us-central1.run.app
 **Code repository:** https://github.com/brianmyers-ctrl/edgar-sentinel (public)
-**Demo video:** <YouTube URL — public, ≤ 4:00>
+**Demo video:** https://youtu.be/jJYZ74b0gUs (public, 3:45)
 **Bonus — build-in-public post:** <blog URL>
 **Bonus — social post:** <X/LinkedIn URL with #AllThingsAgenticHackathon>
 **Bonus — additional Google models:** Gemma (gemma3:4b on Cloud Run; gemma4:12b locally) — triage stage; **Lyria 2** (lyria-002 on Vertex AI) — generated the demo video's lo-fi soundtrack
