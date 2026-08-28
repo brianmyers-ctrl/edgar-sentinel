@@ -8,7 +8,7 @@
 **Code repository:** https://github.com/brianmyers-ctrl/edgar-sentinel (public)
 **Demo video:** https://youtu.be/jJYZ74b0gUs (public, 3:45)
 **Bonus — build-in-public post:** <blog URL>
-**Bonus — social post:** <X/LinkedIn URL with #AllThingsAgenticHackathon>
+**Bonus — social post:** https://www.linkedin.com/posts/brian-myers-8a1087432_allthingsagentichackathon-share-7499145198753529856-d33F/ (public, #AllThingsAgenticHackathon)
 **Bonus — additional Google models:** Gemma (gemma3:4b on Cloud Run; gemma4:12b locally) — triage stage; **Lyria 2** (lyria-002 on Vertex AI) — generated the demo video's lo-fi soundtrack
 
 ---
